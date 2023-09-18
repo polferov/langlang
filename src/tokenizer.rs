@@ -8,6 +8,7 @@ pub enum TokenValue {
     Identifier(String),
     RoundOpen,
     RoundClose,
+    Comma,
 }
 
 impl TokenValue {
@@ -122,6 +123,7 @@ impl Tokenizer {
             ' ' => Some(TokenValue::Space),
             '(' => Some(TokenValue::RoundOpen),
             ')' => Some(TokenValue::RoundClose),
+            ',' => Some(TokenValue::Comma),
             _ => None,
         }
     }

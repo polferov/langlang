@@ -66,7 +66,7 @@ impl Parser {
         let tokens = self.peek_n(2).iter().map(|t| &t.value).collect::<Vec<_>>();
         let stmt = match tokens.as_slice() {
             [TokenValue::Identifier(_), TokenValue::RoundOpen] => Statement::Call(self.parse_call()),
-            _ => panic!("Unexpected tokens {:?}", tokens ),
+            _ => panic!("Unexpected tokens {:?}", tokens),
         };
 
         match self.take().expect("expected semicolon").value.clone() {
@@ -90,10 +90,14 @@ impl Parser {
         }
 
         let mut args = Vec::new();
-        while self.peek().expect("close expected").value != TokenValue::RoundClose {
+        loop {
             args.push(self.parse_expr());
+            match self.take().expect("comma or close expected").value.clone() {
+                TokenValue::Comma => (),
+                TokenValue::RoundClose => break,
+                v => panic!("Expected comma or close. Got {:?}", v),
+            }
         }
-        self.take();
 
         FunctionCall { name: identifier, args }
     }
