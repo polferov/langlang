@@ -1,6 +1,4 @@
-use std::arch::x86_64::__cpuid;
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum TokenValue {
     Semicolon,
     Integer(i32),
@@ -10,6 +8,16 @@ pub enum TokenValue {
     Identifier(String),
     RoundOpen,
     RoundClose,
+}
+
+impl TokenValue {
+    pub fn is_cosmetic(&self) -> bool {
+        match self {
+            TokenValue::Newline => true,
+            TokenValue::Space => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -82,7 +90,7 @@ impl Tokenizer {
 
     fn read_string_literal(&mut self) -> Token {
         let open_quote = self.take().unwrap();
-        if open_quote.c != '"'{
+        if open_quote.c != '"' {
             panic!("Expected an opening quote");
         }
 

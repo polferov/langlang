@@ -1,2 +1,2 @@
-12;
-"abc") echo "abc";;
+a("abc");
+abc(abc(12));
